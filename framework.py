@@ -10,6 +10,7 @@
 
 import os
 import sys
+import platform
 
 import sgtk
 logger = sgtk.platform.get_logger(__name__)
@@ -23,8 +24,17 @@ def get_vendors_path():
     Returns:
         str -- Path to the vendors folder
     """
+    def get_python_version():
+        if sys.hexversion < 0x3000000:
+            return "2"
+
+        return "3"
+
+    def get_platform():
+        return platform.uname()[0]
+
     return os.path.abspath(os.path.join(
-        os.path.dirname(__file__), "vendors"))
+        os.path.dirname(__file__), "Vendors", get_platform(), get_python_version()))
 
 
 def patch_environment():
@@ -64,4 +74,4 @@ class DesktopClientFramework(sgtk.platform.Framework):
         Called by the engine as it is being destroyed.
         """
         self.log_debug("%s: Destroying..." % self)
-        unpatch_environment
+        unpatch_environment()

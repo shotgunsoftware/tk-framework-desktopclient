@@ -11,14 +11,15 @@
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
 from __future__ import print_function, absolute_import
-import sgtk
-import json
 
 from framework import patch_environment
 patch_environment()
 
 
 def main():
+    import sgtk
+    import json
+
     from python import desktop_client
 
     sgtk.set_authenticated_user(

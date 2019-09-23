@@ -12,11 +12,10 @@
 
 set -o xtrace # Echo what get logged
 
-# Get the script location (which is the root of the repository)
 BASEDIR=$(pwd)/$(dirname "$0")
 
 # Locate the vendors folder and zip file from the script location
-VENDORS=$BASEDIR/vendors
+VENDORS=$BASEDIR/Vendors/$(uname)
 
 # Locate the requirements.txt file
 REQUIREMENTS=$BASEDIR/requirements.txt
@@ -24,10 +23,10 @@ REQUIREMENTS=$BASEDIR/requirements.txt
 # Remove everything in the vendors folder
 rm -rf $VENDORS
 
-# Create an empty vendors folder
-mkdir -p $VENDORS
+mkdir -p $VENDORS/2
+python2 -m pip install -r $REQUIREMENTS -t $VENDORS/2
 
-# Fill the vendors folder with the content of requirements.txt
-python -m pip install -r $REQUIREMENTS -t $VENDORS
+mkdir -p $VENDORS/3
+python3 -m pip install -r $REQUIREMENTS -t $VENDORS/3
 
 set +o xtrace
