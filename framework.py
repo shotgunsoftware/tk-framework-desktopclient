@@ -24,7 +24,7 @@ def get_vendors_path():
         str -- Path to the vendors folder
     """
     return os.path.abspath(os.path.join(
-        os.path.dirname(__file__), "vendors.zip"))
+        os.path.dirname(__file__), "vendors"))
 
 
 def patch_environment():
@@ -37,10 +37,7 @@ def patch_environment():
 
     if vendor_path not in sys.path:
         logger.debug("Adding {} to the python path".format(vendor_path))
-        sys.path.append(vendor_path)
-
-        import websocket        # websocket-client
-        import cryptography     # cryptography
+        sys.path.insert(0, vendor_path)
 
 
 def unpatch_environment():
