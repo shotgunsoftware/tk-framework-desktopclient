@@ -20,4 +20,4 @@ This repository can be used as a command line tool. In order to make a request t
 
 ## Build the vendors folder
 
-In order to re-build the vendors folder, you need to run the `vendors.sh` script.
+In order to re-build the Vendors folder, you need to run the `vendors.sh` on mac and on linux and the `vendors.bat` script on Windows. The `python` need to resolve to a valid Python2 interpreter and `python3` need to resolve to a valid Pyhton3 interpreter.
