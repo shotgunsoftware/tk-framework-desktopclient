@@ -16,16 +16,8 @@ Don't hesitate to contact us! You can find us on support@shotgunsoftware.com
 
 ## Use the standalone client
 
-This repository can be used as a command line tool. In order to make a request to a Desktop Server, you can:
-
-1) Execute __main__.py  `python __main__.py`
-2) Execute the folder using `python tk-framework-desktopclient` (or `python .` from the root of the folder)
-3) Execute a zip of this repository using `pythono tk-framework-desktopclient.zip`
+This repository can be used as a command line tool. In order to make a request to a Desktop Server, you can execute a [zip](https://github.com/shotgunsoftware/tk-framework-desktopclient/archive/master.zip) of this repository using `python tk-framework-desktopclient.zip`
 
 ## Build the vendors folder
 
-In order to re-build the vendors folder, you need to:
-- Clean the content of the vendors folder and create a new one using `rm -rf vendors && mkdir vendors`
-- Fill the vendor folder using `python -m pip install -r requirements.txt -t vendors` from the root of the repository
-- Zip that vendor folder using `cd vendors && zip -r ../vendors.zip * && cd -`
-- Remove the vendors folder using `rm -rf vendors`
+In order to re-build the vendors folder, you need to run the `vendors.sh` script.

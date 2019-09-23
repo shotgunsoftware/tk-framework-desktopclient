@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 # Copyright (c) 2019 Shotgun Software Inc.
 #
 # CONFIDENTIAL AND PROPRIETARY
@@ -8,14 +10,15 @@
 # agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
-from __future__ import print_function
+from __future__ import print_function, absolute_import
 import sgtk
 import json
 
 from framework import patch_environment
 patch_environment()
 
-if __name__ == "__main__":
+
+def main():
     from python import desktop_client
 
     sgtk.set_authenticated_user(
@@ -64,3 +67,7 @@ if __name__ == "__main__":
         except RuntimeError as e:
             print(str(e))
             pass
+
+
+if __name__ == "__main__":
+    main()

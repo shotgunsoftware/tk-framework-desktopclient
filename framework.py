@@ -29,22 +29,13 @@ def get_vendors_path():
 
 def patch_environment():
     """
-    This function patch the python path if the required modules are not available.
-
-    It tries to import all the required dependecies and if one is missing, the vendor
-    path get added at the end of the python path.
-
-    Nothins is done if all the required packages are already available.
+    This function patch the python path to add the required modules to the python path.
     """
     # Try to import websocket to see if we are good to go.
-    try:
-        import websocket        # websocket-client
-        import cryptography     # cryptography
 
-        logger.debug("Using global python libraries unaltered .")
-    except ImportError:
-        # We have our version of websocket packaged with the framework for this case.
-        vendor_path = get_vendors_path()
+    vendor_path = get_vendors_path()
+
+    if vendor_path not in sys.path:
         logger.debug("Adding {} to the python path".format(vendor_path))
         sys.path.append(vendor_path)
 
@@ -56,11 +47,9 @@ def unpatch_environment():
     """
     Removes the vendors path from the python path.
     """
-    try:
+    vendor_path = get_vendors_path()
+    if vendor_path in sys.path:
         sys.path.remove(get_vendors_path())
-    except ValueError:
-        # vendor path is not in the sys path
-        pass
 
 
 class DesktopClientFramework(sgtk.platform.Framework):
@@ -78,3 +67,4 @@ class DesktopClientFramework(sgtk.platform.Framework):
         Called by the engine as it is being destroyed.
         """
         self.log_debug("%s: Destroying..." % self)
+        unpatch_environment
