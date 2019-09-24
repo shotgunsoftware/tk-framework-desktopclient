@@ -21,8 +21,8 @@ def get_vendors_path():
 
     The vendors folder is a way to package the dependecies of this framework in a "It just works" manner.
 
-    Returns:
-        str -- Path to the vendors folder
+    :returns: path to the vendors folder
+    :rtype: str
     """
     def get_python_version():
         if sys.hexversion < 0x3000000:

@@ -39,8 +39,8 @@ class DesktopClient(object):
         """
         Build a unique message id.
 
-        Returns:
-            int -- Message id
+        :returns: Message id
+        :rtype: int
         """
         cls.message_id += 1
         return cls.message_id
@@ -58,12 +58,8 @@ class DesktopClient(object):
         In order to be able to use the app as a standalone command line tool, we need to be able inject
         a shotgun connection object so it doesn't rely on the 'current_bundle'
 
-        Arguments:
-            sg_connection {Shotgun} -- Shotgun connection to use with this client. If not set, the connection
-            from the current bundle is used.
-
-        Raises:
-            RuntimeError: Raised if something go wrong while initializing the websocket client.
+        :param Shotgun sg_connection: Shotgun connection to use with this client. If not set, the connection
+        from the current bundle is used.
         """
         super(DesktopClient, self).__init__()
 
@@ -106,14 +102,11 @@ class DesktopClient(object):
         """
         Make a call to a WebSocket server method and return the reply as a python dict.
 
-        Arguments:
-            name {str} -- Name of the server method
+        :param str name: Name of the server method
+        :param dict data: Arguments of the server method (default: {None})
 
-        Keyword Arguments:
-            data {dict} -- Arguments of the server method (default: {None})
-
-        Returns:
-            dict -- Reply from the server as a python object (reply json is part).
+        :returns: Reply from the server as a python object (reply json is part).
+        :rtype: dict
         """
         # Get the server method as a Dict
         resp = json.loads(self._call_server_method(name, data))
@@ -127,8 +120,8 @@ class DesktopClient(object):
         If there's no active connectionn, the function builds a new connection and do the
         handshake so it's ready to use.
 
-        Returns:
-            WebSocket -- Active websocket connection to the Shotgun WebSocket server.
+        :returns: active websocket connection to the Shotgun WebSocket server.
+        :rtype: WebSocket
         """
         try:
             if self._connection:
@@ -163,8 +156,8 @@ class DesktopClient(object):
         """
         Get the currently authenticated user.
 
-        Returns:
-            ShotgunUser -- Currently authenticated user.
+        :returns: Currently authenticated user.
+        :rtype: ShotgunUser
         """
         return sgtk.get_authenticated_user()
 
@@ -174,8 +167,7 @@ class DesktopClient(object):
 
         The payload is encrypted using the WebSocket server secret, if available.
 
-        Arguments:
-            payload {str} -- Payload to send to the server.
+        :param str payload: Payload to send to the server.
         """
         try:
             p = payload
@@ -196,8 +188,8 @@ class DesktopClient(object):
 
         The payload is dencrypted using the WebSocket server secret, if available.
 
-        Returns:
-            str -- Message from the server as a string.
+        :returns: Message from the server as a string.
+        :rtype: str
         """
         try:
             r = self._desktop_connection.recv()
@@ -217,11 +209,10 @@ class DesktopClient(object):
             - Send a payload to the server.
             - Receive a payload from the server.
 
-        Arguments:
-            payload {str} -- Payload to send to the server.
+        :param str payload: Payload to send to the server.
 
-        Returns:
-            str -- Message from the server as a string.
+        :returns: Message from the server as a string.
+        :rtype: str
         """
         self._send(payload)
 
@@ -231,14 +222,11 @@ class DesktopClient(object):
         """
         Make a call to a WebSocket server method and return the raw server response as a string.
 
-        Arguments:
-            name {str} -- Name of the server method
+        :param str name: Name of the server method
+        :param dict data: Arguments of the server method (default: {None})
 
-        Keyword Arguments:
-            data {dict} -- Arguments of the server method (default: {None})
-
-        Returns:
-            dict -- Raw reply from the server as a string.
+        :returns: Reply from the server as a python object (reply json is part).
+        :rtype: dict
         """
         command = {}
 
@@ -289,9 +277,6 @@ class DesktopClient(object):
 
         This function validates the hanshake by doing a dummy call to the server at the end
         of the handshake.
-
-        Raises:
-            RuntimeError: Raised if the call to the dummy method fail at the end of the endshake
         """
         self._secret = None
 
