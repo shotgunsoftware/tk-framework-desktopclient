@@ -12,6 +12,7 @@
 
 from __future__ import print_function, absolute_import
 
+
 from framework import patch_environment
 patch_environment()
 
@@ -22,10 +23,14 @@ def main():
 
     from python import desktop_client
 
-    sgtk.set_authenticated_user(
-        sgtk.authentication.ShotgunAuthenticator().get_default_user())
+    user = sgtk.authentication.ShotgunAuthenticator().get_default_user()
+    if not user:
+        print("Unable to create a Desktop Client unauthenticated.")
+        return 1
 
-    client = desktop_client.DesktopClient()
+    sgtk.set_authenticated_user(user)
+
+    client = desktop_client.DesktopClient(user.create_sg_connection())
     commands = client.call_server_method("list_supported_commands")
     print("DesktopClient standalone client")
     print()
@@ -41,14 +46,17 @@ def main():
     for command in sorted(commands):
         print(" - " + str(command))
     print()
-    print("Enter command ('exit' to exit )")
 
     while True:
         try:
+            print("Enter command ('exit' to exit )")
             user_input = raw_input("> ").strip()
 
+            if not user_input:
+                continue
+
             if user_input == "exit":
-                exit(0)
+                return
 
             if "::" in user_input:
                 command, args = user_input.split("::")
@@ -64,11 +72,12 @@ def main():
             print()
 
             server_resp = client.call_server_method(command, json.loads(args))
-            print(server_resp)
+            print(json.dumps(server_resp, indent=2, sort_keys=True))
+            print()
         except RuntimeError as e:
             print(str(e))
             pass
 
 
 if __name__ == "__main__":
-    main()
+    exit(main())

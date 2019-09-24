@@ -17,7 +17,7 @@ import tempfile
 
 from functools import partial
 
-# Comming from the vendors folder
+# Coming from the vendors folder
 import websocket
 from cryptography.fernet import Fernet
 
@@ -34,18 +34,18 @@ class DesktopClient(object):
 
     message_id = 0
 
-    @staticmethod
-    def get_next_message_id():
+    @classmethod
+    def get_next_message_id(cls):
         """
         Build a unique message id.
 
         Returns:
-            [int] -- Message id
+            int -- Message id
         """
-        DesktopClient.message_id += 1
-        return DesktopClient.message_id
+        cls.message_id += 1
+        return cls.message_id
 
-    def __init__(self):
+    def __init__(self, sg_connection=None):
         """
         Builds a WebSocket client used to send requests to a Shotgun WebSocket server such as
         Shotgun Create.
@@ -54,6 +54,13 @@ class DesktopClient(object):
         talking to a server is facilitated.
 
         Warning: You need to be authenticated to build a DesktopClient instance.
+
+        In order to be able to use the app as a standalone command line tool, we need to be able inject
+        a shotgun connection object so it doesn't rely on the 'current_bundle'
+
+        Arguments:
+            sg_connection {Shotgun} -- Shotgun connection to use with this client. If not set, the connection
+            from the current bundle is used.
 
         Raises:
             RuntimeError: Raised if something go wrong while initializing the websocket client.
@@ -64,11 +71,12 @@ class DesktopClient(object):
         self._server_id = None
         self._secret = None
         self._protocol_version = None
+        self._shotgun_connection = sg_connection or sgtk.platform.current_bundle().shotgun
 
         # We can't do anything without authenticated user.
         if self._current_user is None:
             raise RuntimeError(
-                "Unable to create a Shotgun Create Client unauthenticated.")
+                "Unable to create a Desktop Client unauthenticated.")
 
         # Grab the Desktop cerver CA Bundle from Shotgun and save it on disk
         certificates = self._shotgun_connection._call_rpc(
@@ -77,6 +85,11 @@ class DesktopClient(object):
             prefix="destop_ca_cert_", suffix=".pem")
         self.ca_file.write(certificates.get("sg_desktop_ca"))
         self.ca_file.flush()
+
+        # Set the CA Bundle being used while making client - server communication
+        # We need to override the default CA Bundle because there's no certificate
+        # discovery in this environmnent (A web browser resolve the certificates).
+        os.environ["WEBSOCKET_CLIENT_CA_BUNDLE"] = self.ca_file.name
 
         # Grab the WebSocket server port from Shotgun
         prefs = self._shotgun_connection.preferences_read()
@@ -109,7 +122,7 @@ class DesktopClient(object):
     @property
     def _desktop_connection(self):
         """
-        Returns the currently active websocket connection to the Shotgun WebSocket server.
+        Return the currently active websocket connection to the Shotgun WebSocket server.
 
         If there's no active connectionn, the function builds a new connection and do the
         handshake so it's ready to use.
@@ -122,22 +135,24 @@ class DesktopClient(object):
                 # Ping the server to make sure the connection is still valid.
                 try:
                     self._connection.ping()
-                except:
+                except RuntimeError as e:
                     logger.debug(
-                        "Failed to reuse the active connection. Destroying the connection.")
+                        "Failed to reuse the active connection: {}".format(
+                            str(e)))
+                    logger.debug("Destroying the connection.")
                     self._connection = None
 
             if not self._connection:
-                os.environ["WEBSOCKET_CLIENT_CA_BUNDLE"] = self.ca_file.name
                 self._connection = websocket.create_connection(
                     "wss://shotgunlocalhost.com:{}".format(
                         self.shotgun_create_websocket_port)
                 )
 
                 self._do_websocketserver_handshake()
-        except:
+
+        except Exception as e:
             logger.debug(
-                "Failed to get a valid websocket connection")
+                "Failed to get a valid websocket connection: {}".format(str(e)))
             self._connection = None
             raise
 
@@ -153,16 +168,6 @@ class DesktopClient(object):
         """
         return sgtk.get_authenticated_user()
 
-    @property
-    def _shotgun_connection(self):
-        """
-        Get a new Shotgun api connection using the currently authenticated user.
-
-        Returns:
-            Shotgun -- Shotgun connection.
-        """
-        return self._current_user.create_sg_connection()
-
     def _send(self, payload):
         """
         Send a payload to the server.
@@ -175,11 +180,14 @@ class DesktopClient(object):
         try:
             p = payload
 
+            # self._secret is expected to be none at the begining of the connection handshake.
             if self._secret:
                 p = self._secret.encrypt(p)
 
             self._desktop_connection.send(p)
-        except:
+        except RuntimeError as e:
+            logger.debug(
+                "Failed to send a payload to the server: {}".format(str(e)))
             pass
 
     def _recv(self):
@@ -194,11 +202,14 @@ class DesktopClient(object):
         try:
             r = self._desktop_connection.recv()
 
+            # self._secret is expected to be none at the begining of the connection handshake.
             if self._secret:
                 r = self._secret.decrypt(r)
 
             return r
-        except:
+        except RuntimeError as e:
+            logger.debug(
+                "Failed receive a payload from the server: {}".format(str(e)))
             return "{}"
 
     def _send_and_recv(self, payload):
@@ -276,7 +287,7 @@ class DesktopClient(object):
             - Get the WebSocket server ID
             - Get the WebSocket server secret from Shotgun (used to encrypt the communications)
 
-        This function validate the hanshake by doing a dummy call to the server at the end
+        This function validates the hanshake by doing a dummy call to the server at the end
         of the handshake.
 
         Raises:

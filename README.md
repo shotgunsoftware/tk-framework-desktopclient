@@ -16,7 +16,7 @@ Don't hesitate to contact us! You can find us on support@shotgunsoftware.com
 
 ## Use the standalone client
 
-This repository can be used as a command line tool. In order to make a request to a Desktop Server, you can execute a [zip](https://github.com/shotgunsoftware/tk-framework-desktopclient/archive/master.zip) of this repository using `python tk-framework-desktopclient.zip`
+This repository can be used as a command line tool. In order to make a request to a Desktop Server, you can execute a the `client.py` file using `python client.py`
 
 ## Build the vendors folder
 
