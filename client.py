@@ -50,7 +50,10 @@ def main():
     while True:
         try:
             print("Enter command ('exit' to exit )")
-            user_input = raw_input("> ").strip()
+            try:
+                user_input = raw_input("> ").strip()
+            except NameError:
+                user_input = input("> ").strip
 
             if not user_input:
                 continue

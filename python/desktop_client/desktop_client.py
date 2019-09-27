@@ -8,21 +8,14 @@
 # agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
-import sys
-import os
 import json
 import time
-import ssl
-import tempfile
-
-from functools import partial
 
 # Coming from the vendors folder
 import websocket
 from cryptography.fernet import Fernet
 
 import sgtk
-from sgtk.authentication import ShotgunAuthenticator
 
 logger = sgtk.LogManager.get_logger(__name__)
 
