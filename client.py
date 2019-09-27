@@ -67,8 +67,8 @@ def main():
                 args = "{}"
 
             print()
-            print("Command: {}".format(command))
-            print("Arguments: {}".format(args))
+            print("Command: {0}".format(command))
+            print("Arguments: {0}".format(args))
             print()
 
             server_resp = client.call_server_method(command, json.loads(args))

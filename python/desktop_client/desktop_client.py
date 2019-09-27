@@ -74,23 +74,10 @@ class DesktopClient(object):
             raise RuntimeError(
                 "Unable to create a Desktop Client unauthenticated.")
 
-        # Grab the Desktop cerver CA Bundle from Shotgun and save it on disk
-        certificates = self._shotgun_connection._call_rpc(
-            "sg_desktop_certificates", {})
-        self.ca_file = tempfile.NamedTemporaryFile(
-            prefix="destop_ca_cert_", suffix=".pem")
-        self.ca_file.write(certificates.get("sg_desktop_ca"))
-        self.ca_file.flush()
-
-        # Set the CA Bundle being used while making client - server communication
-        # We need to override the default CA Bundle because there's no certificate
-        # discovery in this environmnent (A web browser resolve the certificates).
-        os.environ["WEBSOCKET_CLIENT_CA_BUNDLE"] = self.ca_file.name
-
         # Grab the WebSocket server port from Shotgun
         prefs = self._shotgun_connection.preferences_read()
         sg_create_prefs = json.loads(
-            prefs.get(DesktopClient.SG_DESKTOP_SETTINGS_KEY, "{}"))
+            prefs.get(DesktopClient.SG_DESKTOP_SETTINGS_KEY, {}))
         self.shotgun_create_websocket_port = sg_create_prefs.get(DesktopClient.SG_DESKTOP_WEBSOCKET_PORT_KEY,
                                                                  DesktopClient.SG_DESKTOP_DEFAULT_WEBSOCKET_PORT)
 
@@ -130,14 +117,14 @@ class DesktopClient(object):
                     self._connection.ping()
                 except RuntimeError as e:
                     logger.debug(
-                        "Failed to reuse the active connection: {}".format(
+                        "Failed to reuse the active connection: {0}".format(
                             str(e)))
                     logger.debug("Destroying the connection.")
                     self._connection = None
 
             if not self._connection:
                 self._connection = websocket.create_connection(
-                    "wss://shotgunlocalhost.com:{}".format(
+                    "wss://shotgunlocalhost.com:{0}".format(
                         self.shotgun_create_websocket_port)
                 )
 
@@ -145,7 +132,7 @@ class DesktopClient(object):
 
         except Exception as e:
             logger.debug(
-                "Failed to get a valid websocket connection: {}".format(str(e)))
+                "Failed to get a valid websocket connection: {0}".format(str(e)))
             self._connection = None
             raise
 
@@ -179,7 +166,7 @@ class DesktopClient(object):
             self._desktop_connection.send(p)
         except RuntimeError as e:
             logger.debug(
-                "Failed to send a payload to the server: {}".format(str(e)))
+                "Failed to send a payload to the server: {0}".format(str(e)))
             pass
 
     def _recv(self):
@@ -201,7 +188,7 @@ class DesktopClient(object):
             return r
         except RuntimeError as e:
             logger.debug(
-                "Failed receive a payload from the server: {}".format(str(e)))
+                "Failed receive a payload from the server: {0}".format(str(e)))
             return "{}"
 
     def _send_and_recv(self, payload):
