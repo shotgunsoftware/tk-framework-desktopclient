@@ -11,17 +11,13 @@
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
 from __future__ import print_function, absolute_import
-
+import sgtk
+import json
 
 from framework import patch_environment
-patch_environment()
-
 
 def main():
-    import sgtk
-    import json
-
-    from python import desktop_client
+    from python.create_client import CreateClient
 
     user = sgtk.authentication.ShotgunAuthenticator().get_default_user()
     if not user:
@@ -30,9 +26,9 @@ def main():
 
     sgtk.set_authenticated_user(user)
 
-    client = desktop_client.DesktopClient(user.create_sg_connection())
+    client = CreateClient(user.create_sg_connection())
     commands = client.call_server_method("list_supported_commands")
-    print("DesktopClient standalone client")
+    print("CreateClient standalone client")
     print()
     print("Usage:")
     print("> COMMAND :: ARGUMENT")
@@ -83,4 +79,5 @@ def main():
 
 
 if __name__ == "__main__":
+    patch_environment()
     exit(main())

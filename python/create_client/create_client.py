@@ -20,10 +20,10 @@ import sgtk
 logger = sgtk.LogManager.get_logger(__name__)
 
 
-class DesktopClient(object):
-    SG_DESKTOP_SETTINGS_KEY = "view_master_settings"
-    SG_DESKTOP_WEBSOCKET_PORT_KEY = "websocket_port"
-    SG_DESKTOP_DEFAULT_WEBSOCKET_PORT = 9006
+class CreateClient(object):
+    SG_CREATE_SETTINGS_KEY = "view_master_settings"
+    SG_CREATE_WEBSOCKET_PORT_KEY = "websocket_port"
+    SG_CREATE_DEFAULT_WEBSOCKET_PORT = 9006
 
     message_id = 0
 
@@ -46,7 +46,7 @@ class DesktopClient(object):
         The websocket client grab the Shotgun websocket port from Shotgun and do the server handshake so
         talking to a server is facilitated.
 
-        Warning: You need to be authenticated to build a DesktopClient instance.
+        Warning: You need to be authenticated to build a CreateClient instance.
 
         In order to be able to use the app as a standalone command line tool, we need to be able inject
         a shotgun connection object so it doesn't rely on the 'current_bundle'
@@ -54,7 +54,7 @@ class DesktopClient(object):
         :param Shotgun sg_connection: Shotgun connection to use with this client. If not set, the connection
         from the current bundle is used.
         """
-        super(DesktopClient, self).__init__()
+        super(CreateClient, self).__init__()
 
         self._connection = None
         self._server_id = None
@@ -65,14 +65,14 @@ class DesktopClient(object):
         # We can't do anything without authenticated user.
         if self._current_user is None:
             raise RuntimeError(
-                "Unable to create a Desktop Client unauthenticated.")
+                "Unable to create a Shotgun Create Client unauthenticated.")
 
         # Grab the WebSocket server port from Shotgun
         prefs = self._shotgun_connection.preferences_read()
         sg_create_prefs = json.loads(
-            prefs.get(DesktopClient.SG_DESKTOP_SETTINGS_KEY, {}))
-        self.shotgun_create_websocket_port = sg_create_prefs.get(DesktopClient.SG_DESKTOP_WEBSOCKET_PORT_KEY,
-                                                                 DesktopClient.SG_DESKTOP_DEFAULT_WEBSOCKET_PORT)
+            prefs.get(CreateClient.SG_CREATE_SETTINGS_KEY, {}))
+        self.shotgun_create_websocket_port = sg_create_prefs.get(CreateClient.SG_CREATE_WEBSOCKET_PORT_KEY,
+                                                                 CreateClient.SG_CREATE_DEFAULT_WEBSOCKET_PORT)
 
         # Initialize the connection
         if self._desktop_connection is None:
@@ -240,7 +240,7 @@ class DesktopClient(object):
 
         message = {}
         message["protocol_version"] = self._protocol_version
-        message["id"] = DesktopClient.get_next_message_id()
+        message["id"] = CreateClient.get_next_message_id()
         message["command"] = command
         message["timestamp"] = int(time.time() * 1000)
 

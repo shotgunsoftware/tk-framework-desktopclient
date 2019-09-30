@@ -59,7 +59,7 @@ def unpatch_environment():
         sys.path.remove(get_vendors_path())
 
 
-class DesktopClientFramework(sgtk.platform.Framework):
+class CreateClientFramework(sgtk.platform.Framework):
     def init_framework(self):
         """
         Implemented by deriving classes in order to initialize the app.
