@@ -17,7 +17,7 @@ Don't hesitate to contact us! You can find us on support@shotgunsoftware.com
 ## Use the standalone client
 
 This repository can be used as a command line tool. In order to make a request
-to a Shotgun Create, you can execute a the `client.py` file using `python client.py`
+to a Shotgun Create, you can execute a the `create_client.py` file using `python create_client.py`
 
 ## Build the vendors folder
 
