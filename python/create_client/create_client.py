@@ -60,19 +60,23 @@ class CreateClient(object):
         self._server_id = None
         self._secret = None
         self._protocol_version = None
-        self._shotgun_connection = sg_connection or sgtk.platform.current_bundle().shotgun
+        self._shotgun_connection = (
+            sg_connection or sgtk.platform.current_bundle().shotgun
+        )
 
         # We can't do anything without authenticated user.
         if self._current_user is None:
             raise RuntimeError(
-                "Unable to create a Shotgun Create Client unauthenticated.")
+                "Unable to create a Shotgun Create Client unauthenticated."
+            )
 
         # Grab the WebSocket server port from Shotgun
         prefs = self._shotgun_connection.preferences_read()
-        sg_create_prefs = json.loads(
-            prefs.get(CreateClient.SG_CREATE_SETTINGS_KEY, {}))
-        self.shotgun_create_websocket_port = sg_create_prefs.get(CreateClient.SG_CREATE_WEBSOCKET_PORT_KEY,
-                                                                 CreateClient.SG_CREATE_DEFAULT_WEBSOCKET_PORT)
+        sg_create_prefs = json.loads(prefs.get(CreateClient.SG_CREATE_SETTINGS_KEY, {}))
+        self.shotgun_create_websocket_port = sg_create_prefs.get(
+            CreateClient.SG_CREATE_WEBSOCKET_PORT_KEY,
+            CreateClient.SG_CREATE_DEFAULT_WEBSOCKET_PORT,
+        )
 
         # Initialize the connection
         if self._desktop_connection is None:
@@ -110,22 +114,24 @@ class CreateClient(object):
                     self._connection.ping()
                 except RuntimeError as e:
                     logger.debug(
-                        "Failed to reuse the active connection: {0}".format(
-                            str(e)))
+                        "Failed to reuse the active connection: {0}".format(str(e))
+                    )
                     logger.debug("Destroying the connection.")
                     self._connection = None
 
             if not self._connection:
                 self._connection = websocket.create_connection(
                     "wss://shotgunlocalhost.com:{0}".format(
-                        self.shotgun_create_websocket_port)
+                        self.shotgun_create_websocket_port
+                    )
                 )
 
                 self._do_websocketserver_handshake()
 
         except Exception as e:
             logger.debug(
-                "Failed to get a valid websocket connection: {0}".format(str(e)))
+                "Failed to get a valid websocket connection: {0}".format(str(e))
+            )
             self._connection = None
             raise
 
@@ -158,8 +164,7 @@ class CreateClient(object):
 
             self._desktop_connection.send(p)
         except RuntimeError as e:
-            logger.debug(
-                "Failed to send a payload to the server: {0}".format(str(e)))
+            logger.debug("Failed to send a payload to the server: {0}".format(str(e)))
             pass
 
     def _recv(self):
@@ -180,8 +185,7 @@ class CreateClient(object):
 
             return r
         except RuntimeError as e:
-            logger.debug(
-                "Failed receive a payload from the server: {0}".format(str(e)))
+            logger.debug("Failed receive a payload from the server: {0}".format(str(e)))
             return "{}"
 
     def _send_and_recv(self, payload):
@@ -218,10 +222,8 @@ class CreateClient(object):
 
         user_info = self._shotgun_connection.find_one(
             "HumanUser",
-            [
-                ["login", "is", self._current_user.login]
-            ],
-            ["entity_hash", "groups", "permission_rule_set", "name"]
+            [["login", "is", self._current_user.login]],
+            ["entity_hash", "groups", "permission_rule_set", "name"],
         )
         command_user = {}
         command_user["entity"] = {}
@@ -230,8 +232,7 @@ class CreateClient(object):
         command_user["entity"]["name"] = user_info["name"]
         command_user["entity"]["status"] = "act"
         command_user["entity"]["valid"] = "valid"
-        command_user["group_ids"] = [group["id"]
-                                     for group in user_info["groups"]]
+        command_user["group_ids"] = [group["id"] for group in user_info["groups"]]
 
         command_user["rule_set_display_name"] = user_info["permission_rule_set"]["name"]
         command_user["rule_set_id"] = user_info["permission_rule_set"]["id"]
@@ -261,10 +262,8 @@ class CreateClient(object):
         self._secret = None
 
         # Grab the protocol version from the running Shotgun WebSocket server
-        protocol_version_resp = self._send_and_recv(
-            "get_protocol_version")
-        self._protocol_version = json.loads(protocol_version_resp)[
-            "protocol_version"]
+        protocol_version_resp = self._send_and_recv("get_protocol_version")
+        self._protocol_version = json.loads(protocol_version_resp)["protocol_version"]
 
         # Grab the WebSocket server ID from the Shotgun WebSocket server
         server_id_resp = self._call_server_method("get_ws_server_id")
@@ -281,11 +280,8 @@ class CreateClient(object):
         self._secret = Fernet(ws_server_secret)
 
         # Make a dummy call to the server to make sure that the handshake is correctly done
-        supported_command_repsp = self._call_server_method(
-            "list_supported_commands")
-        supported_commands = json.loads(
-            supported_command_repsp).get("reply", [])
+        supported_command_repsp = self._call_server_method("list_supported_commands")
+        supported_commands = json.loads(supported_command_repsp).get("reply", [])
 
         if "list_supported_commands" not in supported_commands:
-            raise RuntimeError(
-                "Unknown error in the websocket server handshake")
+            raise RuntimeError("Unknown error in the websocket server handshake")
