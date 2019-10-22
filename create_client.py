@@ -36,7 +36,7 @@ def main():
     print()
     print()
     print("Example:")
-    print("> set_media_path :: {\"path\": \"/media/Picture.jpeg\"}")
+    print('> set_media_path :: {"path": "/media/Picture.jpeg"}')
     print()
     print()
     print("Available commands:")
