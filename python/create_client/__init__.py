@@ -8,4 +8,62 @@
 # agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
-from create_client import *
+from .create_client import CreateClient
+from .create_utils import (
+    get_shotgun_create_path,
+    launch_shotgun_create,
+    is_create_installed,
+)
+
+import time
+
+
+def is_create_running(sg_connection=None):
+    """
+    Launch Shotgun Create and inject the current authentication informations into the Shotgun Create session.
+
+    :param Shotgun sg_connection: Shotgun connection to use with the CreateClient. If not set, the connection
+    from the current bundle is used.
+
+    :returns: The success of the Shotgun Create launch
+    :rtype: bool
+    """
+    try:
+        CreateClient(sg_connection)
+        return True
+    except Exception:
+        return False
+
+
+def ensure_create_server_is_running(sg_connection=None, retry_count=30):
+    """
+    This function ensure that Shotgun Create is running.
+
+    This is an helper function that starts Shotgun Create with the right
+    Shotgun Session if Create is not running and wait up to ``retry_count``
+    seconds for the WebSocket server to be initialized.
+
+    :param Shotgun sg_connection: Shotgun connection to use with the CreateClient. If not set, the connection
+    from the current bundle is used.
+
+    :param int retry_count: Amount of retry to use when check if Shotgun Create is running.
+
+    :returns: Returns the success of connecting to the Shotgun Create
+            websocket server.
+    :rtype: bool
+    """
+    if is_create_running(sg_connection):
+        return True
+
+    launch_status = launch_shotgun_create(sg_connection)
+
+    if not launch_status:
+        return launch_status
+
+    for _ in range(0, retry_count):
+        time.sleep(1)
+
+        if is_create_running(sg_connection):
+            return True
+
+    return False
