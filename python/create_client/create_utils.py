@@ -12,24 +12,43 @@ import os
 import platform
 import subprocess
 
-import sgtk
+from sgtk.util import ShotgunPath
 
-SHOTGUN_CREATE_PATH = dict()
-SHOTGUN_CREATE_PATH_ENV = dict()
-
-SHOTGUN_CREATE_PATH["windows"] = os.path.abspath(os.path.join(
-    os.sep, "ProgramFiles", "Autodesk", "ShotgunCreate", "bin", "ShotgunCreate.exe"))
-SHOTGUN_CREATE_PATH_ENV["windows"] = "SHOTGUN_CREATE_WINDOWS_PATH"
-
-SHOTGUN_CREATE_PATH["darwin"] = os.path.abspath(os.path.join(
-    os.sep, "Applications", "Autodesk", "Shotgun Create.app", "Contents", "MacOS", "Shotgun Create"))
-SHOTGUN_CREATE_PATH_ENV["darwin"] = "SHOTGUN_CREATE_DARWIN_PATH"
-
-SHOTGUN_CREATE_PATH["linux"] = os.path.abspath(os.path.join(
-    os.sep, "opt", "Autodesk", "ShotgunCreate", "bin", "ShotgunCreate"))
-SHOTGUN_CREATE_PATH_ENV["linux"] = "SHOTGUN_CREATE_LINUX_PATH"
-
-PLATFORM = platform.system().lower()
+CREATE_DEFAULT_LOCATION = ShotgunPath.from_shotgun_dict(
+    {
+        "windows_path": os.path.abspath(
+            os.path.join(
+                os.sep,
+                # The name of the folder can change based on the locale.
+                # https://www.samlogic.net/articles/program-files-folder-different-languages.htm
+                # The safe way to retrieve the path to the Program Files folder is to read the env var
+                # Warning: Running this code on non-window trigger a KeyError
+                # This is why we use get with a dummy default value.
+                os.environ.get("ProgramFiles", "%ProgramFiles%"),
+                "Autodesk",
+                "ShotgunCreate",
+                "bin",
+                "ShotgunCreate.exe",
+            )
+        ),
+        "mac_path": os.path.abspath(
+            os.path.join(
+                os.sep,
+                "Applications",
+                "Autodesk",
+                "Shotgun Create.app",
+                "Contents",
+                "MacOS",
+                "Shotgun Create",
+            )
+        ),
+        "linux_path": os.path.abspath(
+            os.path.join(
+                os.sep, "opt", "Autodesk", "ShotgunCreate", "bin", "ShotgunCreate"
+            )
+        ),
+    }
+)
 
 
 def get_shotgun_create_path():
@@ -40,10 +59,10 @@ def get_shotgun_create_path():
     :returns: Path to the Shotgun Create executable
     :rtype: str
     """
-    shotgun_create_default_path = SHOTGUN_CREATE_PATH[PLATFORM]
-    env_var_override_name = SHOTGUN_CREATE_PATH_ENV[PLATFORM]
 
-    return os.environ.get(env_var_override_name, shotgun_create_default_path)
+    env_var_override_name = "SHOTGUN_CREATE_{0}_PATH".format(platform.system().upper())
+
+    return os.environ.get(env_var_override_name, CREATE_DEFAULT_LOCATION.current_os)
 
 
 def launch_shotgun_create(sg_connection):
@@ -56,13 +75,18 @@ def launch_shotgun_create(sg_connection):
     try:
         # Set the current credentials so create starts in the right environment
         os.environ["SHOTGUN_CREATE_AUTHENTICATION_SITE"] = sg_connection.base_url
-        os.environ["SHOTGUN_CREATE_AUTHENTICATION_SESSION"] = sg_connection.get_session_token()
+        os.environ[
+            "SHOTGUN_CREATE_AUTHENTICATION_SESSION"
+        ] = sg_connection.get_session_token()
 
-        with open(os.devnull, 'w') as devnull_f:
-            subprocess.Popen([get_shotgun_create_path()],
-                            stdout=devnull_f, stderr=devnull_f)
+        with open(os.devnull, "w") as devnull_f:
+            subprocess.Popen(
+                [get_shotgun_create_path()], stdout=devnull_f, stderr=devnull_f
+            )
+
             return True
-    except:
+
+    except Exception:
         return False
 
 

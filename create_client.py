@@ -29,7 +29,7 @@ def main():
 
     if not ensure_create_server_is_running(user.create_sg_connection()):
         print("Failed to ensure that Shotgun Create is running")
-        return
+        return 2
 
     client = CreateClient(user.create_sg_connection())
     commands = client.call_server_method("list_supported_commands")
@@ -40,7 +40,7 @@ def main():
     print()
     print()
     print("Example:")
-    print("> sgc_open_task_board :: { \"project_id\" : null }")
+    print('> sgc_open_task_board :: { "project_id" : null }')
     print()
     print()
     print("Available commands:")
@@ -60,7 +60,7 @@ def main():
                 continue
 
             if user_input == "exit":
-                return
+                return 0
 
             if "::" in user_input:
                 command, args = user_input.split("::")
