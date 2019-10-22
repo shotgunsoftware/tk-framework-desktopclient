@@ -65,9 +65,12 @@ def get_shotgun_create_path():
     return os.environ.get(env_var_override_name, CREATE_DEFAULT_LOCATION.current_os)
 
 
-def launch_shotgun_create(sg_connection):
+def launch_shotgun_create(sg_connection=None):
     """
     Launch Shotgun Create and inject the current authentication informations into the Shotgun Create session.
+
+    :param Shotgun sg_connection: Shotgun connection to use with this client. If not set, the connection
+    from the current bundle is used.
 
     :returns: The success of the Shotgun Create launch
     :rtype: bool
