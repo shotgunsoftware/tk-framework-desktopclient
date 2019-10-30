@@ -10,6 +10,7 @@
 
 import json
 import time
+import ssl
 
 # Coming from the vendors folder
 import websocket
@@ -120,10 +121,13 @@ class CreateClient(object):
                     self._connection = None
 
             if not self._connection:
+                ssl_defaults = ssl.get_default_verify_paths()
+
                 self._connection = websocket.create_connection(
                     "wss://shotgunlocalhost.com:{0}".format(
                         self.shotgun_create_websocket_port
-                    )
+                    ),
+                    sslopt={"ca_certs": ssl_defaults.cafile},
                 )
 
                 self._do_websocketserver_handshake()
