@@ -16,6 +16,7 @@ from .create_utils import (
 )
 
 import time
+import webbrowser
 
 
 def is_create_running(sg_connection=None):
@@ -67,3 +68,17 @@ def ensure_create_server_is_running(sg_connection=None, retry_count=30):
             return True
 
     return False
+
+
+def open_shotgun_create_download_page(sg_connection):
+    """
+    Open the create download page on the prefered browser.
+    """
+
+    CREATE_DOWNLOAD_ENDPOINT = "page/create_download"
+
+    download_page = "/".join(
+        [sg_connection.base_url.rstrip("/"), CREATE_DOWNLOAD_ENDPOINT]
+    )
+
+    webbrowser.open(download_page)
