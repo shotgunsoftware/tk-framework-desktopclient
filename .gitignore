@@ -39,3 +39,6 @@ nosetests.xml
 .vscode
 
 .DS
+
+# Ignore the vendors folder
+!Vendors

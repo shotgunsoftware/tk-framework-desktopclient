@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/local/opt/python/bin/python3.7
 
 import argparse
 import code
