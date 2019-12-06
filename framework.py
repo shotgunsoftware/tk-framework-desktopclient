@@ -26,18 +26,9 @@ def get_vendors_path():
     :rtype: str
     """
 
-    def get_python_version():
-        if sys.hexversion < 0x3000000:
-            return "2"
-
-        return "3"
-
-    def get_platform():
-        return platform.uname()[0]
-
     return os.path.abspath(
         os.path.join(
-            os.path.dirname(__file__), "Vendors", get_platform(), get_python_version()
+            os.path.dirname(__file__), "Vendors"
         )
     )
 
