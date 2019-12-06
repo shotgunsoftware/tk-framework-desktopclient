@@ -15,7 +15,7 @@ set -o xtrace # Echo what get executed
 BASEDIR=$(pwd)/$(dirname "$0")
 
 # Locate the Vendors folder and zip file from the script location
-VENDORS=$BASEDIR/Vendors/$(uname)
+VENDORS=$BASEDIR/Vendors
 
 # Locate the requirements.txt file
 REQUIREMENTS=$BASEDIR/requirements.txt
@@ -24,10 +24,7 @@ REQUIREMENTS=$BASEDIR/requirements.txt
 rm -rf $VENDORS
 
 # Build the Vendors folder
-mkdir -p $VENDORS/2
-python -m pip install -r $REQUIREMENTS -t $VENDORS/2
-
-mkdir -p $VENDORS/3
-python3 -m pip install -r $REQUIREMENTS -t $VENDORS/3
+mkdir -p $VENDORS
+python -m pip install -r $REQUIREMENTS -t $VENDORS
 
 set +o xtrace

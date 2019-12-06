@@ -9,7 +9,7 @@ rem agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
 rem not expressly granted therein are reserved by Shotgun Software Inc.
 
 rem Locate the vendors folder and zip file from the script location
-set VENDORS="%~dp0Vendors\Windows"
+set VENDORS="%~dp0Vendors"
 
 rem Locate the requirements.txt file
 set REQUIREMENTS="%~dp0requirements.txt"
@@ -18,11 +18,4 @@ rem Remove everything in the vendors folder
 del /F/S/Q %VENDORS%  > NUL
 RMDIR /S/Q %VENDORS%
 
-rem Build the Vendors folder
-mkdir %VENDORS%
-
-mkdir %VENDORS%\2
-python -m pip install -r %REQUIREMENTS% -t %VENDORS%\2
-
-mkdir %VENDORS%\3
-python3 -m pip install -r %REQUIREMENTS% -t %VENDORS%\3
+python -m pip install -r %REQUIREMENTS% -t %VENDORS%
