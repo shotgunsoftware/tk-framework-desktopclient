@@ -8,5 +8,5 @@
 # agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
-cryptography     == 2.7
 websocket_client == 0.56.0
+git+https://github.com/shotgunsoftware/python-fernet.git@v1.0.1-python2#fernet

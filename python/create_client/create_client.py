@@ -14,7 +14,7 @@ import ssl
 
 # Coming from the vendors folder
 import websocket
-from cryptography.fernet import Fernet
+from fernet import Fernet
 
 import sgtk
 

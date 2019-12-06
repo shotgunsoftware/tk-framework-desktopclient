@@ -26,7 +26,7 @@ CREATE_DEFAULT_LOCATION = ShotgunPath.from_shotgun_dict(
                 # This is why we use get with a dummy default value.
                 os.environ.get("ProgramFiles", "%ProgramFiles%"),
                 "Autodesk",
-                "ShotgunCreate",
+                "Shotgun Create",
                 "bin",
                 "ShotgunCreate.exe",
             )
@@ -100,4 +100,5 @@ def is_create_installed():
     :returns: The success of the Shotgun Create binary lookup
     :rtype: bool
     """
+
     return os.path.exists(get_shotgun_create_path())
