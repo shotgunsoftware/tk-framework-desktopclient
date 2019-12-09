@@ -25,6 +25,7 @@ rm -rf $VENDORS
 
 # Build the Vendors folder
 mkdir -p $VENDORS
-python -m pip install -r $REQUIREMENTS -t $VENDORS
+
+python -m pip install --no-compile -r $REQUIREMENTS -t $VENDORS
 
 set +o xtrace

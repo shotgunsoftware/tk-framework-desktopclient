@@ -18,4 +18,4 @@ rem Remove everything in the vendors folder
 del /F/S/Q %VENDORS%  > NUL
 RMDIR /S/Q %VENDORS%
 
-python -m pip install -r %REQUIREMENTS% -t %VENDORS%
+python -m pip install --no-compile -r %REQUIREMENTS% -t %VENDORS%
