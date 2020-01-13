@@ -75,7 +75,7 @@ def open_shotgun_create_download_page(sg_connection):
     Open the create download page on the prefered browser.
     """
 
-    CREATE_DOWNLOAD_ENDPOINT = "page/create_download"
+    CREATE_DOWNLOAD_ENDPOINT = "page/create_download?showToolkitBanner"
 
     download_page = "/".join(
         [sg_connection.base_url.rstrip("/"), CREATE_DOWNLOAD_ENDPOINT]
