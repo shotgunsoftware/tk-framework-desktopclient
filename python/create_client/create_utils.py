@@ -76,15 +76,31 @@ def launch_shotgun_create(sg_connection=None):
     :rtype: bool
     """
     try:
+        create_env = os.environ.copy()
+
         # Set the current credentials so create starts in the right environment
-        os.environ["SHOTGUN_CREATE_AUTHENTICATION_SITE"] = sg_connection.base_url
-        os.environ[
+        create_env["SHOTGUN_CREATE_AUTHENTICATION_SITE"] = sg_connection.base_url
+        create_env[
             "SHOTGUN_CREATE_AUTHENTICATION_SESSION"
         ] = sg_connection.get_session_token()
 
+        # Unset values that might have been set by Shotgun Desktop and that might
+        # affect the way Shotgun Create bootstrap his engine.
+        for environment_variable in [
+            "SHOTGUN_PIPELINE_CONFIGURATION_ID",
+            "SHOTGUN_SITE",
+            "SHOTGUN_ENTITY_TYPE",
+            "SHOTGUN_ENTITY_ID",
+        ]:
+            if environment_variable in create_env:
+                del create_env[environment_variable]
+
         with open(os.devnull, "w") as devnull_f:
             subprocess.Popen(
-                [get_shotgun_create_path()], stdout=devnull_f, stderr=devnull_f
+                [get_shotgun_create_path()],
+                stdout=devnull_f,
+                stderr=devnull_f,
+                env=create_env,
             )
 
             return True
