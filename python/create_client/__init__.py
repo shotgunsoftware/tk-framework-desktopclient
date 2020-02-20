@@ -21,12 +21,12 @@ import webbrowser
 
 def is_create_running(sg_connection=None):
     """
-    Launch Shotgun Create and inject the current authentication informations into the Shotgun Create session.
+    Checks for the status of Shotgun Create.
 
-    :param Shotgun sg_connection: Shotgun connection to use with the CreateClient. If not set, the connection
-    from the current bundle is used.
+    :param Shotgun sg_connection: Shotgun connection to use with the CreateClient. \
+    If not set, the connection from the current bundle is used.
 
-    :returns: The success of the Shotgun Create launch
+    :returns: True if Shotgun Create is running
     :rtype: bool
     """
     try:
@@ -44,13 +44,12 @@ def ensure_create_server_is_running(sg_connection=None, retry_count=30):
     Shotgun Session if Create is not running and wait up to ``retry_count``
     seconds for the WebSocket server to be initialized.
 
-    :param Shotgun sg_connection: Shotgun connection to use with the CreateClient. If not set, the connection
-    from the current bundle is used.
+    :param Shotgun sg_connection: Shotgun connection to use with the CreateClient. \
+        If not set, the connection from the current bundle is used.
 
     :param int retry_count: Amount of retry to use when check if Shotgun Create is running.
 
-    :returns: Returns the success of connecting to the Shotgun Create
-            websocket server.
+    :returns: Returns the success of connecting to the Shotgun Create websocket server.
     :rtype: bool
     """
     if is_create_running(sg_connection):
