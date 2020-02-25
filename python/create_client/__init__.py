@@ -49,7 +49,7 @@ def ensure_create_server_is_running(sg_connection=None, retry_count=30):
 
     :param int retry_count: Amount of retry to use when check if Shotgun Create is running.
 
-    :returns: Returns the success of connecting to the Shotgun Create websocket server.
+    :returns: ``True`` is we could connect to Shotgun Create, ``False`` otherwise.
     :rtype: bool
     """
     if is_create_running(sg_connection):
