@@ -52,7 +52,7 @@ class CreateClient(object):
         In order to be able to use the app as a standalone command line tool, we need to be able inject
         a shotgun connection object so it doesn't rely on the 'current_bundle'
 
-        :param Shotgun sg_connection: Shotgun connection to use with this client. \
+        :param Shotgun sg_connection: Shotgun connection to use with this client.
             If not set, the connection from the current bundle is used.
         """
         super(CreateClient, self).__init__()
