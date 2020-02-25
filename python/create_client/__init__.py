@@ -21,7 +21,7 @@ import webbrowser
 
 def is_create_running(sg_connection=None):
     """
-    Checks for the status of Shotgun Create.
+    Check for the status of Shotgun Create.
 
     :param Shotgun sg_connection: Shotgun connection to use with the CreateClient. \
     If not set, the connection from the current bundle is used.
