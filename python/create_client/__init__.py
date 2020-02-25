@@ -44,7 +44,7 @@ def ensure_create_server_is_running(sg_connection=None, retry_count=30):
     Shotgun Session if Create is not running and wait up to ``retry_count``
     seconds for the WebSocket server to be initialized.
 
-    :param Shotgun sg_connection: Shotgun connection to use with the CreateClient. \
+    :param Shotgun sg_connection: Shotgun connection to use with the CreateClient.
         If not set, the connection from the current bundle is used.
 
     :param int retry_count: Amount of retry to use when check if Shotgun Create is running.
