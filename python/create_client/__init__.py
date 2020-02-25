@@ -26,7 +26,7 @@ def is_create_running(sg_connection=None):
     :param Shotgun sg_connection: Shotgun connection to use with the CreateClient.
         If not set, the connection from the current bundle is used.
 
-    :returns: True if Shotgun Create is running
+    :returns: ``True`` if Shotgun Create is running, ``False`` if not.
     :rtype: bool
     """
     try:
