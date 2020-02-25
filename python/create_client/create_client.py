@@ -53,7 +53,7 @@ class CreateClient(object):
         a shotgun connection object so it doesn't rely on the 'current_bundle'
 
         :param Shotgun sg_connection: Shotgun connection to use with this client.
-            If not set, the connection from the current bundle is used.
+                If not set, the connection from the current bundle is used.
         """
         super(CreateClient, self).__init__()
 
