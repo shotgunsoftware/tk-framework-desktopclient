@@ -29,7 +29,7 @@ class CreateClient(object):
     message_id = 0
 
     @classmethod
-    def get_next_message_id(cls):
+    def _get_next_message_id(cls):
         """
         Build a unique message id.
 
@@ -52,8 +52,8 @@ class CreateClient(object):
         In order to be able to use the app as a standalone command line tool, we need to be able inject
         a shotgun connection object so it doesn't rely on the 'current_bundle'
 
-        :param Shotgun sg_connection: Shotgun connection to use with this client. If not set, the connection
-        from the current bundle is used.
+        :param Shotgun sg_connection: Shotgun connection to use with this client.
+                If not set, the connection from the current bundle is used.
         """
         super(CreateClient, self).__init__()
 
@@ -245,7 +245,7 @@ class CreateClient(object):
 
         message = {}
         message["protocol_version"] = self._protocol_version
-        message["id"] = CreateClient.get_next_message_id()
+        message["id"] = CreateClient._get_next_message_id()
         message["command"] = command
         message["timestamp"] = int(time.time() * 1000)
 
