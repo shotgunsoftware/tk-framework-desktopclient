@@ -17,7 +17,6 @@ develop-eggs
 .installed.cfg
 lib
 lib64
-__pycache__
 
 # Installer logs
 pip-log.txt
@@ -40,5 +39,6 @@ nosetests.xml
 
 .DS
 
-# Ignore the vendors folder
+# Include everything in the vendors folder irrespective of the above rules.
 !Vendors/**
+__pycache__
