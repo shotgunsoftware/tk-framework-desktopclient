@@ -14,6 +14,7 @@ import ssl
 
 # Coming from the vendors folder
 import websocket
+import six
 from fernet import Fernet
 
 import sgtk
@@ -102,7 +103,7 @@ class CreateClient(object):
         """
         Return the currently active websocket connection to the Shotgun WebSocket server.
 
-        If there's no active connectionn, the function builds a new connection and do the
+        If there's no active connection, the function builds a new connection and do the
         handshake so it's ready to use.
 
         :returns: active websocket connection to the Shotgun WebSocket server.
@@ -160,9 +161,9 @@ class CreateClient(object):
         :param str payload: Payload to send to the server.
         """
         try:
-            p = payload
+            p = six.ensure_binary(payload)
 
-            # self._secret is expected to be none at the begining of the connection handshake.
+            # self._secret is expected to be none at the beginning of the connection handshake.
             if self._secret:
                 p = self._secret.encrypt(p)
 
@@ -175,15 +176,15 @@ class CreateClient(object):
         """
         Receive a payload from the server.
 
-        The payload is dencrypted using the WebSocket server secret, if available.
+        The payload is decrypted using the WebSocket server secret, if available.
 
         :returns: Message from the server as a string.
         :rtype: str
         """
         try:
-            r = self._desktop_connection.recv()
+            r = six.ensure_binary(self._desktop_connection.recv())
 
-            # self._secret is expected to be none at the begining of the connection handshake.
+            # self._secret is expected to be none at the beginning of the connection handshake.
             if self._secret:
                 r = self._secret.decrypt(r)
 
@@ -255,12 +256,12 @@ class CreateClient(object):
         """
         Execute the websocket server handshake on the currently active websocket connection.
 
-        The hanshake is:
+        The handshake is:
             - Get the protocol version from the server
             - Get the WebSocket server ID
             - Get the WebSocket server secret from Shotgun (used to encrypt the communications)
 
-        This function validates the hanshake by doing a dummy call to the server at the end
+        This function validates the handshake by doing a dummy call to the server at the end
         of the handshake.
         """
         self._secret = None
@@ -277,9 +278,9 @@ class CreateClient(object):
         response = self._shotgun_connection._call_rpc(
             "retrieve_ws_server_secret", {"ws_server_id": self._server_id}
         )
-        ws_server_secret = response["ws_server_secret"]
-        if ws_server_secret[-1] != "=":
-            ws_server_secret += "="
+        ws_server_secret = six.ensure_binary(response["ws_server_secret"])
+        if ws_server_secret[-1] != b"=":
+            ws_server_secret += b"="
 
         self._secret = Fernet(ws_server_secret)
 
