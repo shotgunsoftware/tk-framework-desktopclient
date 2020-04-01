@@ -279,7 +279,7 @@ class CreateClient(object):
             "retrieve_ws_server_secret", {"ws_server_id": self._server_id}
         )
         ws_server_secret = six.ensure_binary(response["ws_server_secret"])
-        if ws_server_secret[-1] != b"=":
+        if ws_server_secret[-1:] != b"=":
             ws_server_secret += b"="
 
         self._secret = Fernet(ws_server_secret)
