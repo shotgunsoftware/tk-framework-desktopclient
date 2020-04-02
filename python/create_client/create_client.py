@@ -14,10 +14,17 @@ import ssl
 
 # Coming from the vendors folder
 import websocket
-import six
 from fernet import Fernet
 
 import sgtk
+
+try:
+    # Six comes bundled with this framework, however there can be cases
+    # where an older version of six has already been imported, so we should
+    # try to import from the tank_vendor name space to avoid clashes.
+    from tank_vendor import six
+except:
+    import six
 
 logger = sgtk.LogManager.get_logger(__name__)
 
