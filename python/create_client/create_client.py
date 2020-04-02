@@ -23,7 +23,8 @@ try:
     # where an older version of six has already been imported, so we should
     # try to import from the tank_vendor name space to avoid clashes.
     from tank_vendor import six
-except:
+except ImportError:
+    # sgtk isn't around and it is probably running standalone.
     import six
 
 logger = sgtk.LogManager.get_logger(__name__)
