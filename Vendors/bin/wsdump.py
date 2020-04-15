@@ -1,4 +1,4 @@
-#!/Users/philips1/.pyenv/versions/2.7.16/bin/python
+#!/usr/local/opt/python@2/bin/python2.7
 
 import argparse
 import code
