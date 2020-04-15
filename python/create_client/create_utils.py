@@ -91,6 +91,7 @@ def launch_shotgun_create(sg_connection=None):
             "SHOTGUN_SITE",
             "SHOTGUN_ENTITY_TYPE",
             "SHOTGUN_ENTITY_ID",
+            "PYTHONPATH",  # This fixes issues with Python 3 and Create not launching on Windows.
         ]:
             if environment_variable in create_env:
                 del create_env[environment_variable]
