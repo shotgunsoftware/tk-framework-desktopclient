@@ -71,7 +71,7 @@ def ensure_create_server_is_running(sg_connection=None, retry_count=30):
 
 def open_shotgun_create_download_page(sg_connection):
     """
-    Open the create download page on the prefered browser.
+    Open the create download page on the preferred browser.
     """
 
     CREATE_DOWNLOAD_ENDPOINT = "page/create_download?showToolkitBanner"
