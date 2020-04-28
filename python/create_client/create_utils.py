@@ -84,13 +84,15 @@ def launch_shotgun_create(sg_connection=None):
             "SHOTGUN_CREATE_AUTHENTICATION_SESSION"
         ] = sg_connection.get_session_token()
 
-        # Unset values that might have been set by Shotgun Desktop and that might
-        # affect the way Shotgun Create bootstrap his engine.
+        # Unset values that might cause Shotgun Create to not start
+        # correctly. Some, originally set by Shotgun Desktop, might
+        # affect the way Shotgun Create bootstrap it's engine.
         for environment_variable in [
             "SHOTGUN_PIPELINE_CONFIGURATION_ID",
             "SHOTGUN_SITE",
             "SHOTGUN_ENTITY_TYPE",
             "SHOTGUN_ENTITY_ID",
+            "LD_LIBRARY_PATH",  # On Maya on Linux creates this which causes issues.
         ]:
             if environment_variable in create_env:
                 del create_env[environment_variable]
