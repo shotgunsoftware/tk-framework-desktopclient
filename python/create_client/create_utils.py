@@ -92,7 +92,7 @@ def launch_shotgun_create(sg_connection=None):
             "SHOTGUN_SITE",
             "SHOTGUN_ENTITY_TYPE",
             "SHOTGUN_ENTITY_ID",
-            "LD_LIBRARY_PATH",  # On Maya on Linux creates this which causes issues.
+            "LD_LIBRARY_PATH",  # In Maya on Linux creates this which causes issues.
         ]:
             if environment_variable in create_env:
                 del create_env[environment_variable]
