@@ -88,7 +88,9 @@ class CreateClient(object):
         else:
             # Grab the WebSocket server port from Shotgun
             prefs = self._shotgun_connection.preferences_read()
-            sg_create_prefs = json.loads(prefs.get(CreateClient.SG_CREATE_SETTINGS_KEY, {}))
+            sg_create_prefs = json.loads(
+                prefs.get(CreateClient.SG_CREATE_SETTINGS_KEY, {})
+            )
             self.shotgun_create_websocket_port = sg_create_prefs.get(
                 CreateClient.SG_CREATE_WEBSOCKET_PORT_KEY,
                 CreateClient.SG_CREATE_DEFAULT_WEBSOCKET_PORT,
