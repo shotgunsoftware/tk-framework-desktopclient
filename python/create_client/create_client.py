@@ -48,7 +48,7 @@ class CreateClient(object):
         cls.message_id += 1
         return cls.message_id
 
-    def __init__(self, sg_connection=None):
+    def __init__(self, sg_connection=None, port_override=None):
         """
         Builds a WebSocket client used to send requests to a Shotgun WebSocket server such as
         Shotgun Create.
@@ -63,6 +63,9 @@ class CreateClient(object):
 
         :param Shotgun sg_connection: Shotgun connection to use with this client.
                 If not set, the connection from the current bundle is used.
+
+        :param int port_override: The port number used for the connection. If not set,
+                the value from Shotgun preferences or a default value is used
         """
         super(CreateClient, self).__init__()
 
@@ -80,13 +83,18 @@ class CreateClient(object):
                 "Unable to create a Shotgun Create Client unauthenticated."
             )
 
-        # Grab the WebSocket server port from Shotgun
-        prefs = self._shotgun_connection.preferences_read()
-        sg_create_prefs = json.loads(prefs.get(CreateClient.SG_CREATE_SETTINGS_KEY, {}))
-        self.shotgun_create_websocket_port = sg_create_prefs.get(
-            CreateClient.SG_CREATE_WEBSOCKET_PORT_KEY,
-            CreateClient.SG_CREATE_DEFAULT_WEBSOCKET_PORT,
-        )
+        if port_override is not None:
+            self.shotgun_create_websocket_port = port_override
+        else:
+            # Grab the WebSocket server port from Shotgun
+            prefs = self._shotgun_connection.preferences_read()
+            sg_create_prefs = json.loads(
+                prefs.get(CreateClient.SG_CREATE_SETTINGS_KEY, {})
+            )
+            self.shotgun_create_websocket_port = sg_create_prefs.get(
+                CreateClient.SG_CREATE_WEBSOCKET_PORT_KEY,
+                CreateClient.SG_CREATE_DEFAULT_WEBSOCKET_PORT,
+            )
 
         # Initialize the connection
         if self._desktop_connection is None:
@@ -279,8 +287,13 @@ class CreateClient(object):
         self._protocol_version = json.loads(protocol_version_resp)["protocol_version"]
 
         # Grab the WebSocket server ID from the Shotgun WebSocket server
-        server_id_resp = self._call_server_method("get_ws_server_id")
-        self._server_id = json.loads(server_id_resp)["ws_server_id"]
+        server_id_resp = json.loads(self._call_server_method("get_ws_server_id"))
+
+        # dekstopserver and create return different structures for this. Allow a response from either server
+        if "reply" in server_id_resp:
+            server_id_resp = server_id_resp["reply"]
+
+        self._server_id = server_id_resp["ws_server_id"]
 
         # Ask for the secret for this server id.
         response = self._shotgun_connection._call_rpc(
