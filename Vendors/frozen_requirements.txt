@@ -1,0 +1,4 @@
+fernet==1.0.1
+pyaes==1.6.1
+six==1.14.0
+websocket-client==0.56.0
