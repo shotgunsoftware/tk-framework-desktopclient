@@ -4,11 +4,11 @@
 [![Linting](https://img.shields.io/badge/PEP8%20by-Hound%20CI-a873d1.svg)](https://houndci.com)
 
 ## Documentation
-This repository is a part of the Shotgun Pipeline Toolkit.
+This repository is a part of the ShotGrid Pipeline Toolkit.
 
 - For more information about this app and for release notes, *see the wiki section*.
 - For general information and documentation, click here: https://support.shotgunsoftware.com/entries/95441257
-- For information about Shotgun in general, click here: http://www.shotgunsoftware.com/toolkit
+- For information about ShotGrid in general, click here: http://www.shotgunsoftware.com/toolkit
 
 ## Using this app in your Setup
 All the apps that are part of our standard app suite are pushed to our App Store.
@@ -22,7 +22,7 @@ Don't hesitate to contact us! You can find us on support@shotgunsoftware.com
 ## Use the standalone client
 
 This repository can be used as a command line tool. In order to make a request
-to a Shotgun Create, you can execute a the `create_client.py` file using `python create_client.py`
+to a ShotGrid Create, you can execute a the `create_client.py` file using `python create_client.py`
 
 ## Build the vendors folder
 

@@ -28,7 +28,7 @@ def main():
     sgtk.set_authenticated_user(user)
 
     if not ensure_create_server_is_running(user.create_sg_connection()):
-        print("Failed to ensure that Shotgun Create is running")
+        print("Failed to ensure that ShotGrid Create is running")
         return 2
 
     client = CreateClient(user.create_sg_connection())
