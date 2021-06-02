@@ -80,7 +80,7 @@ class CreateClient(object):
         # We can't do anything without authenticated user.
         if self._current_user is None:
             raise RuntimeError(
-                "Unable to create a Shotgun Create Client unauthenticated."
+                "Unable to create a ShotGrid Create Client unauthenticated."
             )
 
         if port_override is not None:
