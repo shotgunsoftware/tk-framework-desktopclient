@@ -210,7 +210,7 @@ class CreateClient(object):
             return "{}"
 
     def _send_and_recv(self, payload):
-        """ Helper method that:
+        """Helper method that:
             - Send a payload to the server.
             - Receive a payload from the server.
 
