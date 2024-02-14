@@ -26,9 +26,9 @@ CREATE_DEFAULT_LOCATION = ShotgunPath.from_shotgun_dict(
                 # This is why we use get with a dummy default value.
                 os.environ.get("ProgramFiles", "%ProgramFiles%"),
                 "Autodesk",
-                "ShotGrid Create",
+                "Create",
                 "bin",
-                "ShotGridCreate.exe",
+                "Create.exe",
             )
         ),
         "mac_path": os.path.abspath(
@@ -36,15 +36,15 @@ CREATE_DEFAULT_LOCATION = ShotgunPath.from_shotgun_dict(
                 os.sep,
                 "Applications",
                 "Autodesk",
-                "ShotGrid Create.app",
+                "Create.app",
                 "Contents",
                 "MacOS",
-                "ShotGrid Create",
+                "Create",
             )
         ),
         "linux_path": os.path.abspath(
             os.path.join(
-                os.sep, "opt", "Autodesk", "ShotGridCreate", "bin", "ShotGridCreate"
+                os.sep, "opt", "Autodesk", "Create", "bin", "Create"
             )
         ),
     }
