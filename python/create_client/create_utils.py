@@ -43,9 +43,7 @@ CREATE_DEFAULT_LOCATION = ShotgunPath.from_shotgun_dict(
             )
         ),
         "linux_path": os.path.abspath(
-            os.path.join(
-                os.sep, "opt", "Autodesk", "Create", "bin", "Create"
-            )
+            os.path.join(os.sep, "opt", "Autodesk", "Create", "bin", "Create")
         ),
     }
 )
