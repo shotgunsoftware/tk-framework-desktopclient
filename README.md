@@ -22,7 +22,7 @@ Don't hesitate to contact us! You can find us on https://knowledge.autodesk.com/
 ## Use the standalone client
 
 This repository can be used as a command line tool. In order to make a request
-to a ShotGrid Create, you can execute a the `create_client.py` file using `python create_client.py`
+to a Create app, you can execute a the `create_client.py` file using `python create_client.py`
 
 ## Build the vendors folder
 
