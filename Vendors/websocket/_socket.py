@@ -128,7 +128,7 @@ def recv_line(sock):
 
 
 def send(sock, data):
-    if isinstance(data, six.text_type):
+    if isinstance(data, str):
         data = data.encode('utf-8')
 
     if not sock:
