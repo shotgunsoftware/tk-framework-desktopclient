@@ -244,7 +244,7 @@ class ABNF(object):
     def _get_masked(self, mask_key):
         s = ABNF.mask(mask_key, self.data)
 
-        if isinstance(mask_key, str):
+        if isinstance(mask_key, six.text_type):
             mask_key = mask_key.encode('utf-8')
 
         return mask_key + s
@@ -261,10 +261,10 @@ class ABNF(object):
         if data is None:
             data = ""
 
-        if isinstance(mask_key, str):
+        if isinstance(mask_key, six.text_type):
             mask_key = six.b(mask_key)
 
-        if isinstance(data, str):
+        if isinstance(data, six.text_type):
             data = six.b(data)
 
         if numpy:

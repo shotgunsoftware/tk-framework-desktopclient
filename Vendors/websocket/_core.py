@@ -289,7 +289,7 @@ class WebSocket(object):
 
         payload: data payload to send server.
         """
-        if isinstance(payload, str):
+        if isinstance(payload, six.text_type):
             payload = payload.encode("utf-8")
         self.send(payload, ABNF.OPCODE_PING)
 
@@ -299,7 +299,7 @@ class WebSocket(object):
 
         payload: data payload to send server.
         """
-        if isinstance(payload, str):
+        if isinstance(payload, six.text_type):
             payload = payload.encode("utf-8")
         self.send(payload, ABNF.OPCODE_PONG)
 
@@ -376,7 +376,7 @@ class WebSocket(object):
         """
         return self.frame_buffer.recv_frame()
 
-    def send_close(self, status=STATUS_NORMAL, reason=b""):
+    def send_close(self, status=STATUS_NORMAL, reason=six.b("")):
         """
         send close data to the server.
 
@@ -389,7 +389,7 @@ class WebSocket(object):
         self.connected = False
         self.send(struct.pack('!H', status) + reason, ABNF.OPCODE_CLOSE)
 
-    def close(self, status=STATUS_NORMAL, reason=b"", timeout=3):
+    def close(self, status=STATUS_NORMAL, reason=six.b(""), timeout=3):
         """
         Close Websocket object
 
