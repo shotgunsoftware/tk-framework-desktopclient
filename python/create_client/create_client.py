@@ -19,13 +19,9 @@ from fernet import Fernet
 import sgtk
 
 try:
-    # Six comes bundled with this framework, however there can be cases
-    # where an older version of six has already been imported, so we should
-    # try to import from the tank_vendor name space to avoid clashes.
-    from tank_vendor import six
+    from tank_vendor import sgutils
 except ImportError:
-    # sgtk isn't around and it is probably running standalone.
-    import six
+    from tank_vendor import six as sgutils
 
 logger = sgtk.LogManager.get_logger(__name__)
 
@@ -177,7 +173,7 @@ class CreateClient(object):
         :param str payload: Payload to send to the server.
         """
         try:
-            p = six.ensure_binary(payload)
+            p = sgutils.ensure_binary(payload)
 
             # self._secret is expected to be none at the beginning of the connection handshake.
             if self._secret:
@@ -198,7 +194,7 @@ class CreateClient(object):
         :rtype: str
         """
         try:
-            r = six.ensure_binary(self._desktop_connection.recv())
+            r = sgutils.ensure_binary(self._desktop_connection.recv())
 
             # self._secret is expected to be none at the beginning of the connection handshake.
             if self._secret:
@@ -299,7 +295,7 @@ class CreateClient(object):
         response = self._shotgun_connection._call_rpc(
             "retrieve_ws_server_secret", {"ws_server_id": self._server_id}
         )
-        ws_server_secret = six.ensure_binary(response["ws_server_secret"])
+        ws_server_secret = sgutils.ensure_binary(response["ws_server_secret"])
         if ws_server_secret[-1:] != b"=":
             ws_server_secret += b"="
 
