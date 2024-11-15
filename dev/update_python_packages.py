@@ -57,11 +57,13 @@ def main():
                 "--target",
                 temp_dir,
                 "--upgrade",
-            ]
+            ],
+            check=True,
         )
         subprocess.run(
             ["python", "-m", "pip", "freeze", "--path", temp_dir],
             stdout=open(frozen_requirements_txt, "w"),
+            check=True,
         )
 
         # Quickly compute the number of requirements we have.
