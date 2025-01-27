@@ -26,7 +26,13 @@ def get_vendors_path():
     :rtype: str
     """
 
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "Vendors"))
+    return os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "Vendors",
+            "pkgs.zip",
+        )
+    )
 
 
 def patch_environment():
