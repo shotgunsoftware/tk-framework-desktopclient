@@ -9,4 +9,4 @@
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
 git+https://github.com/shotgunsoftware/python-fernet.git@v1.0.1.1
-websocket_client == 0.56.0
+websocket-client == 1.6.1
