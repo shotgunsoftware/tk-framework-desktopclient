@@ -63,7 +63,7 @@ class CreateClient(object):
         :param int port_override: The port number used for the connection. If not set,
                 the value from Shotgun preferences or a default value is used
         """
-        super(CreateClient, self).__init__()
+        super().__init__()
 
         self._connection = None
         self._server_id = None
