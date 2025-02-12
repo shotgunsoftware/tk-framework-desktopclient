@@ -78,9 +78,9 @@ def launch_shotgun_create(sg_connection=None):
 
         # Set the current credentials so create starts in the right environment
         create_env["SHOTGUN_CREATE_AUTHENTICATION_SITE"] = sg_connection.base_url
-        create_env[
-            "SHOTGUN_CREATE_AUTHENTICATION_SESSION"
-        ] = sg_connection.get_session_token()
+        create_env["SHOTGUN_CREATE_AUTHENTICATION_SESSION"] = (
+            sg_connection.get_session_token()
+        )
 
         # Unset values that might cause Shotgun Create to not start
         # correctly. Some, originally set by Shotgun Desktop, might
