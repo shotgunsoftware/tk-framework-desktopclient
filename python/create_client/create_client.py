@@ -18,11 +18,6 @@ from fernet import Fernet
 
 import sgtk
 
-try:
-    from tank_vendor import sgutils
-except ImportError:
-    from tank_vendor import six as sgutils
-
 logger = sgtk.LogManager.get_logger(__name__)
 
 
@@ -173,7 +168,7 @@ class CreateClient(object):
         :param str payload: Payload to send to the server.
         """
         try:
-            p = sgutils.ensure_binary(payload)
+            p = payload.encode("utf-8")
 
             # self._secret is expected to be none at the beginning of the connection handshake.
             if self._secret:
@@ -194,7 +189,7 @@ class CreateClient(object):
         :rtype: str
         """
         try:
-            r = sgutils.ensure_binary(self._desktop_connection.recv())
+            r = self._desktop_connection.recv()
 
             # self._secret is expected to be none at the beginning of the connection handshake.
             if self._secret:
