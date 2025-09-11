@@ -295,7 +295,12 @@ class CreateClient(object):
         response = self._shotgun_connection._call_rpc(
             "retrieve_ws_server_secret", {"ws_server_id": self._server_id}
         )
-        ws_server_secret = sgutils.ensure_binary(response["ws_server_secret"])
+        ws_server_secret = response["ws_server_secret"]
+        ws_server_secret = (
+            response["ws_server_secret"].encode("utf-8")
+            if isinstance(ws_server_secret, str)
+            else ws_server_secret
+        )
         if ws_server_secret[-1:] != b"=":
             ws_server_secret += b"="
 
