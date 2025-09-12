@@ -297,7 +297,7 @@ class CreateClient(object):
         )
         ws_server_secret = response["ws_server_secret"]
         ws_server_secret = (
-            response["ws_server_secret"].encode("utf-8")
+            ws_server_secret.encode("utf-8")
             if isinstance(ws_server_secret, str)
             else ws_server_secret
         )
