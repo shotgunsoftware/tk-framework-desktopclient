@@ -168,7 +168,7 @@ class CreateClient(object):
         :param str payload: Payload to send to the server.
         """
         try:
-            p = payload.encode("utf-8")
+            p = payload if isinstance(payload, bytes) else payload.encode("utf-8")
 
             # self._secret is expected to be none at the beginning of the connection handshake.
             if self._secret:
@@ -190,6 +190,7 @@ class CreateClient(object):
         """
         try:
             r = self._desktop_connection.recv()
+            r = r if isinstance(r, bytes) else r.encode("utf-8")
 
             # self._secret is expected to be none at the beginning of the connection handshake.
             if self._secret:
