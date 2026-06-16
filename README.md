@@ -28,15 +28,15 @@ to a Create app, you can execute a the `create_client.py` file using `python cre
 
 Requirements:
   * [pyenv](https://github.com/pyenv/pyenv)
-  * Install Python 3.7
+  * Install Python 3.9
     ```shell
-    pyenv install 3.7.16
+    pyenv install 3.9.x
     ```
 
 Rebuild:
- 1. Load Python 3.7
+ 1. Load Python 3.9
     ```shell
-    pyenv shell 3.7.16
+    pyenv shell 3.9.x
     ```
 
  2. Run the `vendors.sh` script
